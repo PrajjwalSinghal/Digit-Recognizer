@@ -96,6 +96,10 @@ def trainCNNModel(X_train, y_train, X_test, y_test):
     
     #Adding 1 more layer
     classifier.add(Dense(output_dim = 64, activation = 'relu'))
+    
+    #Adding 1 more layer - Last attempt
+    classifier.add(Dense(output_dim = 64, activation = 'relu'))
+    
     # Adding the output layer
     classifier.add(Dense(output_dim = 10, activation = 'softmax'))
     
