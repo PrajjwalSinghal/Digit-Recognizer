@@ -19,6 +19,7 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import History
 import pickle
 from keras.utils import to_categorical
+from keras.datasets import mnist
 # If using Keras Backend
 #os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
@@ -73,13 +74,13 @@ def trainCNNModel(X_train, y_train, X_test, y_test):
     classifier = Sequential()
     
     #Step 1 - Adding a Convolutional Layer
-    classifier.add(Conv2D(64, (3, 3) ,input_shape = (28,28, 1), activation = 'relu'))
+    classifier.add(Conv2D(128, (3, 3) ,input_shape = (28,28, 1), activation = 'relu'))
     
     #Pooling the first Layer
     classifier.add(MaxPooling2D(pool_size = (2,2)))
     
     #Step 2 : Adding another Convolutional Layer
-    classifier.add(Conv2D(64, (3, 3), activation = 'relu'))
+    classifier.add(Conv2D(128, (3, 3), activation = 'relu'))
     
     # Pooling the second layer
     #classifier.add(MaxPooling2D(pool_size = (2,2)))
@@ -88,11 +89,13 @@ def trainCNNModel(X_train, y_train, X_test, y_test):
     classifier.add(Flatten())
     
     # Adding a ANN and making it Fully connected
-    classifier.add(Dense(output_dim = 16, activation = 'relu'))
+    classifier.add(Dense(output_dim = 64, activation = 'relu'))
     
     # Adding a ANN and making it Fully connected
-    classifier.add(Dense(output_dim = 16, activation = 'relu'))
+    classifier.add(Dense(output_dim = 64, activation = 'relu'))
     
+    #Adding 1 more layer
+    classifier.add(Dense(output_dim = 64, activation = 'relu'))
     # Adding the output layer
     classifier.add(Dense(output_dim = 10, activation = 'softmax'))
     
@@ -105,10 +108,11 @@ def trainCNNModel(X_train, y_train, X_test, y_test):
     
 def main():
     start = time.clock()
-    dataset = pd.read_csv('train.csv')
-    trainingDataset, testDataset = train_test_split(dataset, test_size = 0.20, random_state = 0)
-    X_train, y_train = reshapeAllImages(trainingDataset)
-    X_test, y_test = reshapeAllImages(testDataset)
+    #dataset = pd.read_csv('train.csv')
+    #trainingDataset, testDataset = train_test_split(dataset, test_size = 0.20, random_state = 0)
+    (X_train, y_train), (X_test, y_test) = mnist.load_data()
+    #X_train, y_train = reshapeAllImages(trainingDataset)
+    #X_test, y_test = reshapeAllImages(testDataset)
     X_train = X_train.reshape(len(X_train), 28, 28, 1)
     X_test = X_test.reshape(len(X_test), 28, 28, 1)
     # One hot encoding the target column
